@@ -370,6 +370,17 @@ h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-0.02em;
 .ob-dot.filled span{width:100%;}
 .ob-form{display:flex;flex-direction:column;gap:14px;margin-top:22px;}
 .ob-back{font-size:13px;color:var(--ink-2);font-weight:600;display:flex;align-items:center;gap:4px;margin-top:18px;}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:18px 0 14px;color:var(--ink-2);font-size:12px;font-weight:600;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--line);}
+.google-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:14px;font-weight:700;padding:11px 16px;border-radius:14px;width:100%;text-align:center;
+  background:#fff;border:1px solid var(--line);color:#1f1f1f;transition:transform .15s ease;
+}
+.google-btn:active{transform:scale(0.98);}
+.google-btn svg{width:18px;height:18px;flex-shrink:0;}
+.auth-error{font-size:12.5px;color:var(--rose);min-height:14px;line-height:1.4;}
+#google-signin-btn{display:flex;justify-content:center;margin-top:10px;}
 .gender-row,.goal-grid{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
 .select-tile{
   display:flex;align-items:center;justify-content:space-between;padding:15px 16px;border-radius:16px;
@@ -466,9 +477,45 @@ h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-0.02em;
     <p class="ob-subtitle">Track your everyday lifestyle and see yourself improve, one quiet day at a time.</p>
     <div class="ob-spacer"></div>
     <div class="ob-footer">
-      <button class="primary-btn" onclick="obGoTo(2)">Get started</button>
+      <button class="primary-btn" onclick="obGoTo('auth')">Get started</button>
       <button class="ghost-btn" style="border:none;color:var(--ink-2);" onclick="obUseDemo()">Continue with demo profile</button>
     </div>
+  </section>
+
+  <section class="ob-screen" data-ob="auth">
+    <div class="ob-top-spacer" style="height:6vh;"></div>
+    <h2 class="ob-title" style="font-size:26px;">Welcome</h2>
+    <p class="ob-subtitle">Sign in to sync your habits, or create a free account to get started.</p>
+
+    <div class="tabs-row" style="margin-top:22px;">
+      <button type="button" class="tab-btn active" id="auth-tab-signin" onclick="authSetTab('signin')">Sign in</button>
+      <button type="button" class="tab-btn" id="auth-tab-signup" onclick="authSetTab('signup')">Create account</button>
+    </div>
+
+    <form class="ob-form" id="auth-form-signin" onsubmit="handleSignIn(event)">
+      <div class="field"><label for="auth-signin-email">Email</label><input id="auth-signin-email" type="email" placeholder="you@example.com" required autocomplete="username" /></div>
+      <div class="field"><label for="auth-signin-password">Password</label><input id="auth-signin-password" type="password" placeholder="••••••••" required autocomplete="current-password" /></div>
+      <div class="auth-error" id="auth-signin-error"></div>
+      <button class="primary-btn" type="submit">Sign in</button>
+    </form>
+
+    <form class="ob-form" id="auth-form-signup" style="display:none;" onsubmit="handleSignUp(event)">
+      <div class="field"><label for="auth-signup-name">Name</label><input id="auth-signup-name" type="text" placeholder="Your name" required autocomplete="name" /></div>
+      <div class="field"><label for="auth-signup-email">Email</label><input id="auth-signup-email" type="email" placeholder="you@example.com" required autocomplete="username" /></div>
+      <div class="field"><label for="auth-signup-password">Password</label><input id="auth-signup-password" type="password" placeholder="At least 6 characters" required minlength="6" autocomplete="new-password" /></div>
+      <div class="auth-error" id="auth-signup-error"></div>
+      <button class="primary-btn" type="submit">Create account</button>
+    </form>
+
+    <div class="auth-divider"><span>or</span></div>
+
+    <button type="button" class="google-btn" id="google-btn-fallback" onclick="handleGoogleFallback()">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6.1 29.6 4 24 4c-7.7 0-14.4 4.4-17.7 10.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.3-5.1l-6.6-5.6C29.6 35 26.9 36 24 36c-5.3 0-9.6-3.1-11.3-7.6l-6.6 5c3.3 6.5 10 11.6 17.9 11.6z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.6 5.6C41.9 36 44 30.7 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>
+      <span id="google-btn-label">Continue with Google</span>
+    </button>
+    <div id="google-signin-btn"></div>
+
+    <div class="ob-back" onclick="obGoTo(1)">← Back</div>
   </section>
 
   <section class="ob-screen" data-ob="2">
@@ -496,7 +543,7 @@ h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-0.02em;
       </div>
       <button class="primary-btn" type="submit" style="margin-top:8px;">Continue</button>
     </form>
-    <div class="ob-back" onclick="obGoTo(1)">← Back</div>
+    <div class="ob-back" onclick="obGoTo('auth')">← Back</div>
   </section>
 
   <section class="ob-screen" data-ob="3">
@@ -679,6 +726,12 @@ h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-0.02em;
       </div>
     </div>
 
+    <div class="card card-pad" style="margin-bottom:14px;">
+      <div class="section-title" style="font-size:15px;margin-bottom:4px;">Account</div>
+      <p class="section-sub" id="account-email" style="margin-bottom:14px;">—</p>
+      <button class="ghost-btn" onclick="logOut()">Log out</button>
+    </div>
+
     <div class="card card-pad">
       <div class="section-title" style="font-size:15px;margin-bottom:4px;">Data</div>
       <p class="section-sub" style="margin-bottom:14px;">Stored locally on this device only.</p>
@@ -708,11 +761,15 @@ h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-0.02em;
 /* ============================================================
    STORAGE KEYS
 ============================================================ */
-const K_PROFILE = 'ambient_profile';
-const K_DAYS = 'ambient_days';
-const K_SETTINGS = 'ambient_settings';
-const K_STREAK = 'ambient_streak';
-const K_ONBOARDED = 'ambient_onboarded';
+const K_USERS = 'ambient_users';
+const K_SESSION = 'ambient_session';
+/* Per-account keys: each resolves dynamically based on who is signed in,
+   so two accounts on the same device never see each other's data. */
+Object.defineProperty(window,'K_PROFILE',{configurable:true,get(){return 'ambient_profile:'+currentAccountId();}});
+Object.defineProperty(window,'K_DAYS',{configurable:true,get(){return 'ambient_days:'+currentAccountId();}});
+Object.defineProperty(window,'K_SETTINGS',{configurable:true,get(){return 'ambient_settings:'+currentAccountId();}});
+Object.defineProperty(window,'K_STREAK',{configurable:true,get(){return 'ambient_streak:'+currentAccountId();}});
+Object.defineProperty(window,'K_ONBOARDED',{configurable:true,get(){return 'ambient_onboarded:'+currentAccountId();}});
 
 /* ============================================================
    UTIL
@@ -736,6 +793,169 @@ function readJSON(key,fallback){
 }
 function writeJSON(key,val){
   try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){/* storage unavailable */}
+}
+
+/* ============================================================
+   AUTHENTICATION
+============================================================ */
+function getUsers(){ return readJSON(K_USERS, {}); }
+function saveUsers(u){ writeJSON(K_USERS, u); }
+function getSession(){ return readJSON(K_SESSION, null); }
+function startSession(email){ writeJSON(K_SESSION, {email}); }
+function endSession(){ localStorage.removeItem(K_SESSION); }
+function currentAccountId(){
+  const s = getSession();
+  return s && s.email ? s.email : 'guest';
+}
+
+async function hashPassword(pw){
+  try{
+    if(window.crypto && crypto.subtle){
+      const enc = new TextEncoder().encode(pw);
+      const buf = await crypto.subtle.digest('SHA-256', enc);
+      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+  }catch(e){ /* fall through to fallback hash below */ }
+  // Fallback (non-secure-context environments where SubtleCrypto is unavailable)
+  let h = 0;
+  for(let i=0;i<pw.length;i++){ h = ((h<<5)-h + pw.charCodeAt(i))|0; }
+  return 'fb'+Math.abs(h).toString(16);
+}
+
+function authSetTab(which){
+  document.getElementById('auth-tab-signin').classList.toggle('active', which==='signin');
+  document.getElementById('auth-tab-signup').classList.toggle('active', which==='signup');
+  document.getElementById('auth-form-signin').style.display = which==='signin' ? 'flex' : 'none';
+  document.getElementById('auth-form-signup').style.display = which==='signup' ? 'flex' : 'none';
+  clearAuthErrors();
+}
+function clearAuthErrors(){
+  const a = document.getElementById('auth-signin-error'); if(a) a.textContent = '';
+  const b = document.getElementById('auth-signup-error'); if(b) b.textContent = '';
+}
+
+async function handleSignIn(e){
+  e.preventDefault();
+  clearAuthErrors();
+  const email = document.getElementById('auth-signin-email').value.trim().toLowerCase();
+  const pw = document.getElementById('auth-signin-password').value;
+  const users = getUsers();
+  const user = users[email];
+  if(!user){
+    document.getElementById('auth-signin-error').textContent = "No account with that email — try creating one.";
+    return;
+  }
+  if(user.provider && user.provider !== 'local'){
+    document.getElementById('auth-signin-error').textContent = 'This account uses Google sign-in. Use the button below instead.';
+    return;
+  }
+  const hash = await hashPassword(pw);
+  if(hash !== user.passwordHash){
+    document.getElementById('auth-signin-error').textContent = 'Incorrect password.';
+    return;
+  }
+  startSession(email);
+  toast('Welcome back, '+user.name,'👋');
+  afterAuthSuccess();
+}
+
+async function handleSignUp(e){
+  e.preventDefault();
+  clearAuthErrors();
+  const name = document.getElementById('auth-signup-name').value.trim();
+  const email = document.getElementById('auth-signup-email').value.trim().toLowerCase();
+  const pw = document.getElementById('auth-signup-password').value;
+  if(pw.length < 6){
+    document.getElementById('auth-signup-error').textContent = 'Password must be at least 6 characters.';
+    return;
+  }
+  const users = getUsers();
+  if(users[email]){
+    document.getElementById('auth-signup-error').textContent = 'An account with that email already exists.';
+    return;
+  }
+  const passwordHash = await hashPassword(pw);
+  users[email] = {name, email, passwordHash, provider:'local', createdAt:Date.now()};
+  saveUsers(users);
+  startSession(email);
+  toast('Account created','🎉');
+  afterAuthSuccess();
+}
+
+function afterAuthSuccess(){
+  const onboarded = readJSON(K_ONBOARDED, false);
+  if(onboarded && getProfile()){
+    enterApp();
+  } else {
+    obGoTo(2);
+  }
+}
+
+function logOut(){
+  endSession();
+  toast('Signed out');
+  location.reload();
+}
+
+/* ---- Google Sign-In ---- */
+// To enable "Continue with Google": create an OAuth Client ID at
+// https://console.cloud.google.com/apis/credentials (Application type: Web),
+// add this site's origin under "Authorized JavaScript origins", then paste
+// the Client ID below. Local email/password accounts work without this.
+const GOOGLE_CLIENT_ID = '951827353202-39iah2mtvea59mtskrl5lk3jdc82o006.apps.googleusercontent.com';
+
+function googleSignInConfigured(){
+  return typeof GOOGLE_CLIENT_ID === 'string' && GOOGLE_CLIENT_ID.indexOf('YOUR_GOOGLE_CLIENT_ID') === -1;
+}
+
+function initGoogleSignIn(){
+  const container = document.getElementById('google-signin-btn');
+  const fallback = document.getElementById('google-btn-fallback');
+  if(!container) return;
+  if(!googleSignInConfigured() || typeof google === 'undefined' || !google.accounts || !google.accounts.id){
+    return; // keep the styled fallback button visible
+  }
+  try{
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleGoogleCredential,
+      auto_select: false
+    });
+    google.accounts.id.renderButton(container, {theme:'filled_black', size:'large', shape:'pill', width:320, text:'continue_with'});
+    if(fallback) fallback.style.display = 'none';
+  }catch(e){ /* keep fallback button */ }
+}
+
+function handleGoogleCredential(response){
+  try{
+    const b64 = response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    const payload = JSON.parse(decodeURIComponent(atob(b64).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+    const email = (payload.email || '').toLowerCase();
+    const name = payload.name || (email ? email.split('@')[0] : 'Friend');
+    const picture = payload.picture || '';
+    if(!email){ toast("Couldn't read your Google account"); return; }
+    const users = getUsers();
+    if(!users[email]){
+      users[email] = {name, email, provider:'google', picture, createdAt:Date.now()};
+    } else {
+      users[email].name = name;
+      users[email].picture = picture;
+    }
+    saveUsers(users);
+    startSession(email);
+    toast('Signed in with Google','✅');
+    afterAuthSuccess();
+  }catch(e){
+    toast('Google sign-in failed, please try again');
+  }
+}
+
+function handleGoogleFallback(){
+  if(googleSignInConfigured()){
+    toast('Loading Google sign-in…');
+  } else {
+    toast('Add a Google Client ID in the code to enable this','⚙️');
+  }
 }
 
 /* ============================================================
@@ -1002,6 +1222,13 @@ function obFinish(){
   enterApp();
 }
 function obUseDemo(){
+  const demoEmail = 'demo@local.app';
+  const users = getUsers();
+  if(!users[demoEmail]){
+    users[demoEmail] = {name:'Demo', email:demoEmail, provider:'demo', createdAt:Date.now()};
+    saveUsers(users);
+  }
+  startSession(demoEmail);
   seedDemoData();
   writeJSON(K_ONBOARDED, true);
   enterApp();
@@ -1742,6 +1969,18 @@ function renderProfile(){
   document.getElementById('sw-reminders').classList.toggle('on', settings.remindersOn);
   document.getElementById('sw-theme').classList.toggle('on', settings.theme==='light');
   renderReminderTimes(settings);
+
+  const session = getSession();
+  const accountEl = document.getElementById('account-email');
+  if(accountEl){
+    if(session){
+      const acct = getUsers()[session.email];
+      const label = acct && acct.provider==='google' ? 'Google account' : acct && acct.provider==='demo' ? 'Demo account' : 'Email account';
+      accountEl.textContent = session.email+' · '+label;
+    } else {
+      accountEl.textContent = 'Not signed in';
+    }
+  }
 }
 
 function openEditProfile(){
@@ -1902,17 +2141,23 @@ function refreshEverything(){
   const settings = getSettings();
   if(settings.theme==='light') document.documentElement.classList.add('theme-light');
 
+  const session = getSession();
+  if(!session){
+    // Not signed in: leave the welcome screen (data-ob="1") showing.
+    return;
+  }
+
   const onboarded = readJSON(K_ONBOARDED, false);
   if(onboarded && getProfile()){
     document.getElementById('onboarding').style.display = 'none';
     document.getElementById('app-shell').classList.add('ready');
     refreshEverything();
   } else {
-    // first-time load: keep onboarding visible; preload background demo data
-    // so if the user picks "continue with demo profile" it's instant, and to
-    // satisfy the "don't look empty" requirement for anyone previewing charts.
+    // Signed in but never finished profile setup: resume onboarding there.
+    obGoTo(2);
   }
 })();
 </script>
+<script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleSignIn()"></script>
 </body>
 </html>
