@@ -1850,7 +1850,7 @@ function toggleTheme(){
 
 /* ---- Reset ---- */
 function confirmResetToday(){
-  openModal('Reset today\\'s data?', `
+  openModal("Reset today's data?", `
     <p class="section-sub" style="margin-bottom:4px;">This clears everything logged for today. This can't be undone.</p>
     <div class="confirm-actions">
       <button class="ghost-btn" onclick="closeModal()">Cancel</button>
@@ -1863,7 +1863,7 @@ function resetToday(){
   delete days[todayKey()];
   saveAllDays(days);
   closeModal();
-  toast('Today\\'s data was reset');
+  toast("Today's data was reset");
   refreshEverything();
 }
 function confirmResetAll(){
